@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "instapaper-api"
+dynamic = ["version"]
+description = "Official Python client library for the Instapaper API v2"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Instapaper", email = "support@instapaper.com" },
+]
+keywords = ["instapaper", "read-later", "bookmarks", "highlights", "api", "oauth2"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+build = [
+    "build>=1.4.0",
+    "twine>=6.2.0",
+]
+
+[project.urls]
+Homepage = "https://www.instapaper.com/developers"
+Documentation = "https://www.instapaper.com/developers/overview/getting-started"
+Repository = "https://github.com/Instapaper/instapaper-api-python.git"
+Issues = "https://github.com/Instapaper/instapaper-api-python/issues"
+Changelog = "https://github.com/Instapaper/instapaper-api-python/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+path = "instapaper/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "instapaper/",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["instapaper"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
