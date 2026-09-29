@@ -59,32 +59,47 @@ This writes a source distribution and a wheel to `dist/`.
 
 ## Releasing
 
-Releases are published to PyPI by GitHub Actions when a version tag is pushed.
+The release workflow publishes to TestPyPI when run manually and publishes to PyPI when a version tag is pushed.
 
 1. Update `__version__` in `instapaper/__init__.py`.
 2. Move the changes under a dated version heading in `CHANGELOG.md`.
-3. Commit, then tag and push:
+3. Commit and push `main`.
+4. In GitHub Actions, open the **Release** workflow and choose **Run workflow** on `main`. This publishes the package to TestPyPI.
+5. Install the TestPyPI build in a clean environment and verify it:
 
    ```sh
-   git tag v0.1.0
-   git push origin main v0.1.0
+   python -m venv /tmp/instapaper-api-test
+   /tmp/instapaper-api-test/bin/pip install \
+     --index-url https://test.pypi.org/simple/ \
+     --no-deps \
+     instapaper-api==1.0.0
+   /tmp/instapaper-api-test/bin/python -c \
+     "import instapaper; print(instapaper.__version__)"
    ```
 
-The `release` workflow checks that the tag matches `__version__`, builds the package, and publishes it.
+6. Tag the tested commit and push the tag:
 
-### One-time PyPI setup
+   ```sh
+   git tag -a v1.0.0 -m "Release 1.0.0"
+   git push origin v1.0.0
+   ```
 
-The release workflow uses PyPI trusted publishing, so no API token is stored in GitHub. Before the first release:
+The tagged run checks that the tag matches `__version__`, rebuilds the package, and publishes it to PyPI.
 
-1. Sign in to PyPI with the Instapaper account.
-2. Go to **Your projects > Publishing** (for a project that doesn't exist yet, use **Add a new pending publisher**).
-3. Add a GitHub publisher with:
+### One-time trusted publishing setup
+
+The release workflow uses trusted publishing, so no API token is stored in GitHub. PyPI and TestPyPI are separate services and each needs its own account and publisher configuration.
+
+1. Sign in to TestPyPI and go to **Publishing**, then add a pending GitHub publisher with:
    - PyPI project name: `instapaper-api`
    - Owner: `Instapaper`
    - Repository: `instapaper-api-python`
    - Workflow: `release.yml`
+   - Environment: `testpypi`
+2. In the GitHub repository settings, create an environment named `testpypi`.
+3. Sign in to PyPI and go to **Publishing**, then add a pending GitHub publisher with the same project, owner, repository, and workflow values, but with:
    - Environment: `pypi`
-4. In the GitHub repository settings, create an environment named `pypi`. Adding required reviewers there makes each release wait for approval.
+4. In the GitHub repository settings, create an environment named `pypi`. Add required reviewers so production releases wait for approval. TestPyPI generally does not need required reviewers.
 
 ### Publishing manually
 

@@ -21,14 +21,11 @@ from instapaper import Instapaper
 
 client = Instapaper("your-access-token")
 
-me = client.me()
-print(f"Signed in as {me.username}")
+for bookmark in client.bookmarks.list():
+    print(bookmark.title, bookmark.url)
 
 bookmark = client.bookmarks.save("https://example.com/article", title="An Article")
 client.bookmarks.like(bookmark.id)
-
-for bookmark in client.bookmarks.list():
-    print(bookmark.title, bookmark.url)
 ```
 
 ## Authenticating other users with OAuth

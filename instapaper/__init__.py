@@ -1,6 +1,6 @@
 """Official Python client for the Instapaper API v2."""
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 from ._transport import HTTPRequest, HTTPResponse, Transport  # noqa: E402
 from .client import Instapaper  # noqa: E402
