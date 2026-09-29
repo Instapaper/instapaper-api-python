@@ -27,7 +27,7 @@ print(f"Signed in as {me.username}")
 bookmark = client.bookmarks.save("https://example.com/article", title="An Article")
 client.bookmarks.like(bookmark.id)
 
-for bookmark in client.bookmarks.iterate():
+for bookmark in client.bookmarks.list():
     print(bookmark.title, bookmark.url)
 ```
 
